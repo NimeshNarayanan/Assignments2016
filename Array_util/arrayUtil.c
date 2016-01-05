@@ -10,6 +10,18 @@ ArrayUtil create(int typeSize,int length){
   arr.length = length;
   return arr;
 };
+
+int isEven(void *hint,void *item){
+  if(*(int*)item % 2 == 0)
+    return 1;
+  return 0;
+};
+int isDivisible(void * hint, void * item){
+  if(*(int*)item % *(int*)hint == 0)
+    return 1;
+  return 0;
+};
+
 int areEqual(ArrayUtil arr,ArrayUtil arr1){
   int status = 0;
   if(arr.length == arr1.length && arr.typeSize == arr1.typeSize){
@@ -59,16 +71,17 @@ void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
 };
 void *findLast(ArrayUtil util, MatchFunc *match, void *hint){
   void * base = util.base;
-  void *element;
   for (int i = 0; i < util.length-1; i++, base+=util.typeSize)
-    if(match(hint,base)==1) element = base;
-  return(element)?element:NULL;
+    if(match(hint,base)==1)
+      return base;
+  return NULL;
 };
 
 int count(ArrayUtil util, MatchFunc* match, void* hint){
   void * base = util.base;
   int count = 0;
-  for (int i = 0; i < util.length-1; i++, base+=util.typeSize)
-    if(match(hint,base)==1) count++;
+  for (int i = 0; i < util.length; i++, base+=util.typeSize)
+    if(match(hint,base)==1)
+      count++;
   return count;
 };
