@@ -43,6 +43,29 @@ int findIndex(ArrayUtil util, void * element){
   return -1;
 };
 
-// void dispose(ArrayUtil util){
-//   free(util.base);
-// };
+void dispose(ArrayUtil util){
+  free(util.base);
+};
+
+
+void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
+  void * base = util.base;
+  for (int i = 0; i < util.length; i++, base+=util.typeSize) {
+    if(match(hint,base)==1){
+      return base;
+    }
+  }
+  return NULL;
+};
+void *findLast(ArrayUtil util, MatchFunc *match, void *hint){
+  void * base = util.base;
+  void *element;
+  for (int i = 0; i < util.length; i++, base+=util.typeSize) {
+    if(match(hint,base)==1){
+      element = base;
+    }
+
+  }
+  return(element)?element:NULL;
+  // return NULL;
+};
