@@ -9,4 +9,4 @@ typedef struct ArrayUtil{
  ArrayUtil resize(ArrayUtil,int);
  void insertElement(ArrayUtil *,void *);
  int findIndex(ArrayUtil, void *);
- // void dispose(ArrayUtil);
+ void dispose(ArrayUtil);
