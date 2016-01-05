@@ -36,7 +36,7 @@ void insertElement(ArrayUtil * util,void * elements){
 }
 int findIndex(ArrayUtil util, void * element){
   void *base = util.base;
-  for (int i = 0; i < util.length; i++) {
+  for (int i = 0; i < util.length-1; i++) {
     if(memcmp(base+(util.typeSize*i), element, util.typeSize)==0)
       return i;
   }
@@ -50,7 +50,7 @@ void dispose(ArrayUtil util){
 
 void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
   void * base = util.base;
-  for (int i = 0; i < util.length; i++, base+=util.typeSize) {
+  for (int i = 0; i < util.length-1; i++, base+=util.typeSize) {
     if(match(hint,base)==1){
       return base;
     }
@@ -60,12 +60,15 @@ void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
 void *findLast(ArrayUtil util, MatchFunc *match, void *hint){
   void * base = util.base;
   void *element;
-  for (int i = 0; i < util.length; i++, base+=util.typeSize) {
-    if(match(hint,base)==1){
-      element = base;
-    }
-
-  }
+  for (int i = 0; i < util.length-1; i++, base+=util.typeSize)
+    if(match(hint,base)==1) element = base;
   return(element)?element:NULL;
-  // return NULL;
+};
+
+int count(ArrayUtil util, MatchFunc* match, void* hint){
+  void * base = util.base;
+  int count = 0;
+  for (int i = 0; i < util.length-1; i++, base+=util.typeSize)
+    if(match(hint,base)==1) count++;
+  return count;
 };

@@ -12,5 +12,6 @@ ArrayUtil resize(ArrayUtil,int);
 void insertElement(ArrayUtil *,void *);
 int findIndex(ArrayUtil, void *);
 void dispose(ArrayUtil);
+int count(ArrayUtil util, MatchFunc* match, void* hint);
 // int isEven(void *, void *);
 // int isDivisible(void* hint, void* item);

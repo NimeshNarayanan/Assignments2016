@@ -112,6 +112,13 @@ void test_findLast_return_null_element_not_matches(){
   assert(*element == 0);
   dispose(util);
 }
+
+void test_count_return_the_count_of_match_of_elements(){
+  ArrayUtil util = create(4,4);
+  int elements[] ={1,2,3,4,2};
+  int elem_count = count(util,isEven,NULL);
+  assert(elem_count == 3);
+}
 int main(void){
 test_Create_creates_array_with_given_typeSize_and_length();
 test_areEqual_campare_given_arrays_and_return_one_or_zero();
@@ -120,6 +127,6 @@ test_find_index_returns_the_index_of_given_element();
 test_findIndex_returns_minus_one_for_index_of_given_element_if_the_element_not_in_the_array();
 test_dispose_free_the_memory_allocated_for_array();
 test_findFirst_return_first_element_which_matches();
-
+test_count_return_the_count_of_match_of_elements();
 return 0;
 };
