@@ -23,14 +23,8 @@ int isDivisible(void * hint, void * item){
 };
 
 int areEqual(ArrayUtil arr,ArrayUtil arr1){
-  int status = 0;
   if(arr.length == arr1.length && arr.typeSize == arr1.typeSize){
-    char *base1 = (char *)arr.base;
-    char *base2 = (char *)arr1.base;
-    for (size_t i = 0; i < arr.length*arr.typeSize; i++) {
-      if(base1[i] != base2[i]) return 0;
-    };
-    return 1;
+    return memcmp(arr.base, arr1.base, arr.typeSize*arr.length)==0;
   };
   return 0;
 };
@@ -48,7 +42,7 @@ void insertElement(ArrayUtil * util,void * elements){
 }
 int findIndex(ArrayUtil util, void * element){
   void *base = util.base;
-  for (int i = 0; i < util.length-1; i++) {
+  for (int i = 0; i < util.length; i++) {
     if(memcmp(base+(util.typeSize*i), element, util.typeSize)==0)
       return i;
   }
@@ -62,7 +56,7 @@ void dispose(ArrayUtil util){
 
 void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
   void * base = util.base;
-  for (int i = 0; i < util.length-1; i++, base+=util.typeSize) {
+  for (int i = 0; i < util.length; i++, base+=util.typeSize) {
     if(match(hint,base)==1){
       return base;
     }
@@ -70,10 +64,11 @@ void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
   return NULL;
 };
 void *findLast(ArrayUtil util, MatchFunc *match, void *hint){
-  void * base = util.base;
-  for (int i = 0; i < util.length-1; i++, base+=util.typeSize)
+  for (int i = util.length-1; i >= 0  ; i--){
+    void * base = util.base+(i*util.typeSize);
     if(match(hint,base)==1)
       return base;
+  }
   return NULL;
 };
 
@@ -84,4 +79,69 @@ int count(ArrayUtil util, MatchFunc* match, void* hint){
     if(match(hint,base)==1)
       count++;
   return count;
+};
+////////filter////////////////
+int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ){
+  int lenght = 0;
+  for (int i = 0; i < util.length; i++){
+    void * base = util.base+(i*util.typeSize);
+    if(match(hint,base)==1){
+      destination[lenght] = base;
+      lenght++;
+    }
+    if(lenght == maxItems)return lenght;
+  }
+  return lenght;
+};
+
+///////////////map/////////////
+void change_to_odd(void* hint, void* sourceItem, void* destinationItem){
+  if(*(int*)sourceItem %2 ==0)
+    *(int*)destinationItem = (*(int*)sourceItem)+1;
+  else
+    *(int *)destinationItem = *(int *)sourceItem;
+};
+
+void map(ArrayUtil source, ArrayUtil destination, ConvertFunc* convert, void* hint){
+  void *src_base = source.base;
+  void *dest_base = destination.base;
+  for (size_t i = 0; i < source.length; i++) {
+    convert(NULL,src_base,dest_base);
+    src_base+=source.typeSize;
+    dest_base+=source.typeSize;
+  }
+};
+
+////////////foreach///////////////
+
+void addOne(void* hint, void* item){
+  *(int*)item += 1;
+};
+
+void add_given_value(void* hint, void* item){
+  *(int*)item += *(int*)hint;
+};
+
+void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
+  void *base = util.base;
+  for (size_t i = 0; i < util.length; i++) {
+    operation(hint,base);
+    base+=util.typeSize;
+  };
+};
+
+///////////reduce///////////////
+void isGreater(void* hint, void* previousItem, void* item){
+  if(*(int *)previousItem < *(int *)item)
+    *(int *)previousItem = *(int *)item;
+};
+
+void *reduce(ArrayUtil util, ReducerFunc * reducer, void * hint, void * intialValue){
+  void *base = util.base;
+  void *previousvalue = (void *)calloc(1,util.typeSize);
+  previousvalue = intialValue;
+  for (size_t i = 0; i <util.length ; i++) {
+    reducer(hint,previousvalue,base+(util.typeSize*i));
+  }
+  return previousvalue;
 };

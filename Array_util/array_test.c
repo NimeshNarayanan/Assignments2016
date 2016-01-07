@@ -63,6 +63,8 @@ void test_dispose_free_the_memory_allocated_for_array(){
   int elements[] ={1,2,3,4};
   insertElement(&util,elements);
   dispose(util);
+  // printf("in dispose\n");
+
 };
 void test_findFirst_return_first_element_which_matches(){
   ArrayUtil util = create(4,4);
@@ -73,6 +75,8 @@ void test_findFirst_return_first_element_which_matches(){
   // printf("%p %p\n",util.base, element );
   assert(*element == 2);
   dispose(util);
+  // printf("in firsr find first\n");
+
 };
 void test_findFirst_return_first_divisible_element_which_matches_from_the_array(){
   ArrayUtil util = create(4,4);
@@ -80,37 +84,36 @@ void test_findFirst_return_first_divisible_element_which_matches_from_the_array(
   int hint = 2;
   insertElement(&util,elements);
   int *element = findFirst(util,isDivisible,&hint);
-  // printf("%p %p\n",util.base, element );
+  // printf("%p %d\n",util.base, *element );
   assert(*element == 2);
+  // printf("test_findFirst_return_first_divisible_element_which_matches_from_the_array\n\n");
   dispose(util);
 };
-void test_findFirst_return_null_when_gien_non_matches_element_given(){
+void test_findFirst_return_null_when_non_matches_element_given(){
   ArrayUtil util = create(4,4);
   int elements[] ={8,2,10,4};
   int hint = 3;
   insertElement(&util,elements);
   int *element = findFirst(util,isDivisible,&hint);
-  // printf("%p %p\n",util.base, element );
-  assert(*element == 0);
+  assert(element == NULL);
   dispose(util);
+  // printf("test_findFirst_return_null_when_non_matches_element_given\n");
+
 };
 void test_findFirst_return_null_element_not_matches(){
   ArrayUtil util = create(4,4);
   int elements[] ={1,3,3,5};
-  int hint = 2;
   insertElement(&util,elements);
   int *element = findFirst(util,isEven,NULL);
-  assert(*element == 0);
+  assert(element == NULL);
   dispose(util);
 };
 void test_findLast_return_first_element_which_matches(){
   ArrayUtil util = create(4,4);
   int elements[] ={1,2,3,4};
-  int hint = 2;
   insertElement(&util,elements);
   int *element = findLast(util,isEven,NULL);
-  // printf("%p %p\n",util.base, element );
-  assert(*element == 2);
+  assert(*element == 4);
   dispose(util);
 };
 void test_findLast_return_null_element_not_matches(){
@@ -136,3 +139,140 @@ void test_count_return_the_count_zero_when_no_match_of_elements_found(){
   int elem_count = count(util,isEven,NULL);
   assert(elem_count == 0);
 };
+void test_filter_filter_the_given_array_depends_on_the_matches_and_returns(){
+  ArrayUtil util = create(4,4);
+  int elements[] ={1,4,2,6};
+  insertElement(&util,elements);
+  void *util1[3];
+  int count = filter(util,isEven,NULL,util1,3);
+  // for (int i = 0; i < count; i++) {
+  //   printf("============ %d\n",*(int*)util1[i] );
+  // }
+  assert(count == 3);
+};
+void test_filter_filter_the_given_array_depends_on_the_matches_and_returns_0(){
+  ArrayUtil util = create(4,4);
+  int elements[] ={1,3,5,7};
+  insertElement(&util,elements);
+  void *util1[3];
+  int count = filter(util,isEven,NULL,util1,util.length);
+  assert(count == 0);
+};
+
+void test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_count(){
+  ArrayUtil util = create(4,4);
+  int elements[] ={1,4,2,6};
+  insertElement(&util,elements);
+  void *util1[3];
+  int hint = 2;
+  int count = filter(util,isDivisible,&hint,util1,util.length);
+  assert(count == 3);
+};
+void test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_0(){
+  ArrayUtil util = create(4,4);
+  int elements[] ={1,3,5,7};
+  insertElement(&util,elements);
+  void *util1[3];
+  int hint = 2;
+  int count = filter(util,isDivisible,&hint,util1,util.length);
+  assert(count == 0);
+};
+///////////map////////
+void test_map_maps_source_to_destination_using_the_provided_convert_function(){
+  ArrayUtil source = create(4,5);
+  ArrayUtil destination = create(4,5);
+  ArrayUtil expected_array = create(4,5);
+  int arr[] ={1,7,9,7,1};
+  insertElement(&expected_array,arr);
+  int elements[] ={1,6,8,7,1};
+  insertElement(&source,elements);
+  map(source,destination,change_to_odd,NULL);
+  int *dest = destination.base;
+  int *expect = expected_array.base;
+  // for (size_t i = 0; i < destination.length; i++) {
+  //   printf("%d  ==  %d\n",dest[i], expect[i] );
+  // }
+  assert(areEqual(expected_array,destination)==1);
+
+};
+
+void test_forEach_performs_operation_on_all_items_in_the_array(){
+  ArrayUtil source = create(4,5);
+  int elements[] ={1,6,8,7,1};
+  insertElement(&source,elements);
+  ArrayUtil expected_array = create(4,5);
+  int arr[] ={2,7,9,8,2};
+  insertElement(&expected_array,arr);
+
+  forEach(source,addOne,NULL);
+  int *dest = source.base;
+  int *expect = expected_array.base;
+  // for (size_t i = 0; i < source.length; i++) {
+  //   printf("%d  ==  %d\n",dest[i], expect[i] );
+  // }
+  assert(areEqual(expected_array,source)==1);
+};
+
+void test_forEach_performs_operation_on_all_items_in_the_array_with_given_value(){
+  ArrayUtil source = create(4,5);
+  int elements[] ={1,6,8,7,1};
+  insertElement(&source,elements);
+  ArrayUtil expected_array = create(4,5);
+  int arr[] ={3,8,10,9,3};
+  insertElement(&expected_array,arr);
+  int no = 2;
+  forEach(source,add_given_value,&no);
+  int *dest = source.base;
+  int *expect = expected_array.base;
+  // for (size_t i = 0; i < source.length; i++) {
+  //   printf("%d  ==  %d\n",dest[i], expect[i] );
+  // }
+  assert(areEqual(expected_array,source)==1);
+};
+
+/////////reduce//////////////
+void test_reduce_returns_the_reduces_array_by_a_condition_and_return_the_answer(){
+  ArrayUtil util = create(4,5);
+  int elements[] ={1,6,8,7,4};
+  insertElement(&util,elements);
+  int initialValue = 0;
+  int value = *(int*)reduce(util,isGreater,NULL,&initialValue);
+  assert(value == 8);
+};
+
+void test_reduce_returns_the_initialValue__by_a_condition_if_there_is_no_matching_element(){
+  ArrayUtil util = create(4,5);
+  int elements[] ={1,6,8,7,4};
+  insertElement(&util,elements);
+  int initialValue = 9;
+  int value = *(int*)reduce(util,isGreater,NULL,&initialValue);
+  assert(value == 9);
+};
+int main(void){
+  test_Create_creates_array_with_given_typeSize_and_length();
+  test_areEqual_campare_given_arrays_and_return_one_or_zero();
+  test_areEqual_campare_given_deferent_arrays_and_return_zero();
+  test_resize_resize_given_array_by_given_size_is_less_than_it_size_and_return_resized_array();
+  test_resize_resize_given_array_by_given_size_is_greater_than_it_size_and_return_resized_array();
+  test_find_index_returns_the_index_of_given_element();
+  test_findIndex_returns_minus_one_for_index_of_given_element_if_the_element_not_in_the_array();
+  test_dispose_free_the_memory_allocated_for_array();
+  test_findFirst_return_first_element_which_matches();
+  test_findFirst_return_first_divisible_element_which_matches_from_the_array();
+  test_findFirst_return_null_element_not_matches();
+  test_findLast_return_first_element_which_matches();
+  test_findLast_return_null_element_not_matches();
+  test_count_return_the_count_of_match_of_elements();
+  test_count_return_the_count_zero_when_no_match_of_elements_found();
+  test_findFirst_return_null_when_non_matches_element_given();
+  test_filter_filter_the_given_array_depends_on_the_matches_and_returns();
+  test_filter_filter_the_given_array_depends_on_the_matches_and_returns_0();
+  test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_count();
+  test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_0();
+  test_map_maps_source_to_destination_using_the_provided_convert_function();
+  test_forEach_performs_operation_on_all_items_in_the_array();
+  test_forEach_performs_operation_on_all_items_in_the_array_with_given_value();
+  test_reduce_returns_the_reduces_array_by_a_condition_and_return_the_answer();
+  test_reduce_returns_the_initialValue__by_a_condition_if_there_is_no_matching_element();
+  return 0;
+}
