@@ -40,6 +40,7 @@ void insertElement(ArrayUtil * util,void * elements){
       memcpy(base+(util->typeSize*i), elements+(util->typeSize*i), util->typeSize);
   }
 }
+////////////findIndex///////////////
 int findIndex(ArrayUtil util, void * element){
   void *base = util.base;
   for (int i = 0; i < util.length; i++) {
@@ -53,7 +54,7 @@ void dispose(ArrayUtil util){
   free(util.base);
 };
 
-
+////////////findLast//////////////
 void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
   void * base = util.base;
   for (int i = 0; i < util.length; i++, base+=util.typeSize) {
@@ -63,6 +64,7 @@ void *findFirst(ArrayUtil util, MatchFunc *match, void *hint){
   }
   return NULL;
 };
+/////////findFirst////////////////
 void *findLast(ArrayUtil util, MatchFunc *match, void *hint){
   for (int i = util.length-1; i >= 0  ; i--){
     void * base = util.base+(i*util.typeSize);
@@ -87,6 +89,7 @@ int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int
     void * base = util.base+(i*util.typeSize);
     if(match(hint,base)==1){
       destination[lenght] = base;
+      // printf("%d------\n", *(int*)destination[lenght]);
       lenght++;
     }
     if(lenght == maxItems)return lenght;
