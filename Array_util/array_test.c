@@ -255,3 +255,32 @@ void test_reduce_returns_the_initialValue__by_a_condition_if_there_is_no_matchin
   int value = *(int*)reduce(util,isGreater,NULL,&initialValue);
   assert(value == 9);
 };
+
+int main(void){
+  test_Create_creates_array_with_given_typeSize_and_length();
+  test_areEqual_campare_given_arrays_and_return_one_or_zero();
+  test_areEqual_campare_given_deferent_arrays_and_return_zero();
+  test_resize_resize_given_array_by_given_size_is_less_than_it_size_and_return_resized_array();
+  test_resize_resize_given_array_by_given_size_is_greater_than_it_size_and_return_resized_array();
+  test_find_index_returns_the_index_of_given_element();
+  test_findIndex_returns_minus_one_for_index_of_given_element_if_the_element_not_in_the_array();
+  test_dispose_free_the_memory_allocated_for_array();
+  test_findFirst_return_first_element_which_matches();
+  test_findFirst_return_first_divisible_element_which_matches_from_the_array();
+  test_findFirst_return_null_element_not_matches();
+  test_findLast_return_first_element_which_matches();
+  test_findLast_return_null_element_not_matches();
+  test_count_return_the_count_of_match_of_elements();
+  test_count_return_the_count_zero_when_no_match_of_elements_found();
+  test_findFirst_return_null_when_non_matches_element_given();
+  test_filter_filter_the_given_array_depends_on_the_matches_and_returns();
+  test_filter_filter_the_given_array_depends_on_the_matches_and_returns_0();
+  test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_count();
+  test_filter_filter_the_given_array_depends_on_divisible_matches_and_returns_0();
+  test_map_maps_source_to_destination_using_the_provided_convert_function();
+  test_forEach_performs_operation_on_all_items_in_the_array();
+  test_forEach_performs_operation_on_all_items_in_the_array_with_given_value();
+  test_reduce_returns_the_reduces_array_by_a_condition_and_return_the_answer();
+  test_reduce_returns_the_initialValue__by_a_condition_if_there_is_no_matching_element();
+  return 0;
+}

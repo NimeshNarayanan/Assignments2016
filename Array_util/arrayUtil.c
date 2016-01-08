@@ -134,17 +134,17 @@ void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
 };
 
 ///////////reduce///////////////
-void isGreater(void* hint, void* previousItem, void* item){
+void *isGreater(void* hint, void* previousItem, void* item){
   if(*(int *)previousItem < *(int *)item)
-    *(int *)previousItem = *(int *)item;
+    return item;
+  return previousItem;
 };
 
 void *reduce(ArrayUtil util, ReducerFunc * reducer, void * hint, void * intialValue){
   void *base = util.base;
-  void *previousvalue = (void *)calloc(1,util.typeSize);
-  previousvalue = intialValue;
+  void *previousvalue = intialValue;
   for (size_t i = 0; i <util.length ; i++) {
-    reducer(hint,previousvalue,base+(util.typeSize*i));
+    previousvalue = reducer(hint,previousvalue,base+(util.typeSize*i));
   }
   return previousvalue;
 };

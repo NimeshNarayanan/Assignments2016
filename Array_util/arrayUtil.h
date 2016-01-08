@@ -23,6 +23,6 @@ void addOne(void*, void*);
 void add_given_value(void*, void*);
 typedef void (OperationFunc)(void*, void*);
 void forEach(ArrayUtil, OperationFunc*, void*);
-void isGreater(void *, void *, void *);
-typedef void (ReducerFunc)(void*, void*, void*);
+void * isGreater(void *, void *, void *);
+typedef void *(ReducerFunc)(void*, void*, void*);
 void* reduce(ArrayUtil, ReducerFunc*, void*, void*);
