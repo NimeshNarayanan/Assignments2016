@@ -27,3 +27,6 @@ int add_to_list(LinkedList * linked_list,void *value){
 void *get_first_element(LinkedList list){
   return list.first->value;
 };
+void *get_last_element(LinkedList list){
+  return list.last->value;
+};
