@@ -33,7 +33,20 @@ void test_send_float_data_as_a_reference_and_add_it_to_the_end_of_the_list(){
   float number = *(float*)linked_list.first->value;
   assert(number == no);
 };
-
+void test_send_double_data_as_a_reference_and_add_it_to_the_end_of_the_list(){
+  LinkedList linked_list = createList();
+  double value = 100.38888,no=100.38888;
+  add_to_list(&linked_list,&value);
+  double number = *(double*)linked_list.first->value;
+  assert(number == no);
+};
+void test_send_set_of_character_data_as_a_reference_and_add_it_to_the_end_of_the_list(){
+  LinkedList linked_list = createList();
+  char *value = "abc";
+  add_to_list(&linked_list,value);
+  char *character = (char *)linked_list.first->value;
+  assert(strcmp(character,value) == 0 );
+};
 /////////////////////get_first_element /////////////////
 
 void test_get_first_element_return_first_element_from_the_list(){
@@ -46,6 +59,46 @@ int value = *(int*)get_first_element(linked_list);
 assert(value == 10);
 };
 
+void test_get_first_element_return_first_float_element_from_the_list(){
+LinkedList linked_list = createList();
+float number = 10.7,no = 10.7;
+add_to_list(&linked_list,&number);
+float number1 = 20.6;
+add_to_list(&linked_list,&number1);
+float value = *(float*)get_first_element(linked_list);
+assert(value == no);
+};
+void test_get_first_element_return_first_double_element_from_the_list(){
+LinkedList linked_list = createList();
+double number = 10.79999900;
+add_to_list(&linked_list,&number);
+double number1 = 20.69999660;
+add_to_list(&linked_list,&number1);
+double value = *(double*)get_first_element(linked_list);
+assert(value == 10.79999900);
+};
+void test_get_first_element_return_first_char_element_from_the_list(){
+LinkedList list = createList();
+char arr[5]={'a','b','c','d','e'};
+for (size_t i = 0; i < 5; i++) {
+  add_to_list(&list,&arr[i]);
+}
+char character = *(char *)get_first_element(list);
+assert(character == 'a' );
+};
+
+void test_get_first_element_return_first_string_element_from_the_list(){
+LinkedList linked_list = createList();
+char *value = "abc";
+char *value1 = "bbc";
+add_to_list(&linked_list,value);
+add_to_list(&linked_list,value1);
+char *character = (char *)get_first_element(linked_list);
+assert(strcmp(character,value) == 0 );
+};
+
+//////////get_last_element/////////////////////////////
+
 void test_get_last_element_return_last_element_from_the_list(){
 LinkedList linked_list = createList();
 int number = 10;
@@ -54,6 +107,59 @@ int number1 = 20;
 add_to_list(&linked_list,&number1);
 int value = *(int*)get_last_element(linked_list);
 assert(value == 20);
+};
+void test_get_last_element_return_last_float_element_from_the_list(){
+  LinkedList linked_list = createList();
+  float number = 10.7;
+  add_to_list(&linked_list,&number);
+  float number1 = 20.6;
+  add_to_list(&linked_list,&number1);
+  float value = *(float*)get_last_element(linked_list);
+  assert(value == number1);
+};
+void test_get_last_element_return_last_double_element_from_the_list(){
+  LinkedList linked_list = createList();
+  double number = 10.79999900;
+  add_to_list(&linked_list,&number);
+  double number1 = 20.69999660;
+  add_to_list(&linked_list,&number1);
+  double value = *(double*)get_last_element(linked_list);
+  assert(value == number1);
+};
+void test_get_last_element_return_last_char_element_from_the_list(){
+  LinkedList list = createList();
+  char arr[5]={'a','b','c','d','e'};
+  for (size_t i = 0; i < 5; i++) {
+    add_to_list(&list,&arr[i]);
+  }
+  char character = *(char *)get_last_element(list);
+  assert(character == 'e' );
+};
+void test_get_last_element_return_first_string_element_from_the_list(){
+LinkedList linked_list = createList();
+char *value = "abc";
+char *value1 = "bbc";
+add_to_list(&linked_list,value);
+add_to_list(&linked_list,value1);
+char *character = (char *)get_last_element(linked_list);
+assert(strcmp(character,value1) == 0 );
+};
+
+//////////forEach//////////////////////////
+void increment(void *value){
+  *(int*)value+=1;
+};
+
+void incrementFloat(void *value){
+  *(float*)value+=1;
+};
+void incrementDouble(void *value){
+  *(double*)value+=1;
+};
+void changeToCapitalLeter(void *value){
+    // printf("==%s===",value);
+  if(*(char*)value > 96 && *(char*)value < 123 )
+    *(char*)value += -32;
 };
 
 void test_forEach_change_content_with_given_matching_function(){
@@ -66,17 +172,99 @@ void test_forEach_change_content_with_given_matching_function(){
   assert(*(int*)get_first_element(linked_list) == 11);
   assert(*(int*)get_last_element(linked_list) == 21);
 };
+void test_forEach_change_float_content_with_given_matching_function(){
+  LinkedList linked_list = createList();
+  float number = 10.7,no = 11.7;
+  add_to_list(&linked_list,&number);
+  float number1 = 20.6,no1 = 21.6;
+  add_to_list(&linked_list,&number1);
+  forEach(linked_list,incrementFloat);
+  assert(*(float*)get_first_element(linked_list) == no);
+  // printf("=====%f-%f\n", *(float*)get_last_element(linked_list),no1);
+  assert(*(float*)get_last_element(linked_list) == (no1));
+};
+void test_forEach_change_double_content_with_given_matching_function(){
+  LinkedList linked_list = createList();
+  double number = 10.799999;
+  add_to_list(&linked_list,&number);
+  double number1 = 20.699999;
+  add_to_list(&linked_list,&number1);
+  forEach(linked_list,incrementDouble);
+  assert( *(double*)get_first_element(linked_list) == 11.799999);
+  assert(*(double*)get_last_element(linked_list) == 21.699999);
+};
+void test_forEach_change_char_content_with_given_matching_function(){
+  LinkedList list = createList();
+  char arr[5]={'a','b','C','D','e'};
+  for (size_t i = 0; i < 5; i++) {
+    add_to_list(&list,&arr[i]);
+  }
+  forEach(list,changeToCapitalLeter);
+  char character = *(char *)get_last_element(list);
+  //printf("%c\n",*(char*)list.first->value );
+  Element *ele = list.first;
+  for (size_t i = 0; i < list.length; i++) {
+    assert(*(char*)ele->value == arr[i] );
+    ele = ele->next;
+  }
+};
+
+////////////////getElementAt///////////////////
 
 void test_get_element_at_return_the_elemnt_at_specific_position(){
   LinkedList list = createList();
-  int a = 1,b = 2,c = 3,d = 4;
-  add_to_list(&list,&a);
-  add_to_list(&list,&b);
-  add_to_list(&list,&c);
-  add_to_list(&list,&d);
+  int arr[5]={1,2,3,4,7},b = 2;
+  int expected[3] = {1,3,7};
+  for (size_t i = 0; i < 5; i++) {
+    add_to_list(&list,&arr[i]);
+  }
   int value = *(int*)getElementAt(list,b);
   assert(value == 2);
 };
+
+void test_get_element_at_return_the_float_elemnt_at_specific_position(){
+  LinkedList list = createList();
+  float arr[5]={1.1,2.2,3.4,4.3,7.6},position = 4,expected = 4.3;
+  for (size_t i = 0; i < 5; i++) {
+    add_to_list(&list,&arr[i]);
+  }
+  float value = *(float*)getElementAt(list,position);
+  assert(value == expected);
+};
+
+void test_get_element_at_return_the_char_elemnt_at_specific_position(){
+  LinkedList list = createList();
+  char arr[5]={'a','b','c','d','e'};
+  int position = 3;
+  for (size_t i = 0; i < 5; i++) {
+    add_to_list(&list,&arr[i]);
+  }
+  char value = *(char*)getElementAt(list,position);
+  assert(value == 'c');
+};
+void test_get_element_at_return_the_double_data_typed_elemnt_at_specific_position(){
+  LinkedList linked_list = createList();
+  int position = 2;
+  double number = 10.799999;
+  add_to_list(&linked_list,&number);
+  double number1 = 20.699999;
+  add_to_list(&linked_list,&number1);
+  double value = *(double*)getElementAt(linked_list,position);
+  assert(value == 20.699999);
+};
+
+void test_get_element_at_return_the_string_data_typed_elemnt_at_specific_position(){
+  LinkedList linked_list = createList();
+  int position = 2;
+  char *value = "abc";
+  char *value1 = "bbc";
+  add_to_list(&linked_list,value);
+  add_to_list(&linked_list,value1);
+  char *character = (char *)getElementAt(linked_list,position);
+  assert(strcmp(character,value1) == 0 );
+};
+///////////////indexOf////////////////////
+
 void test_indexOf_return_the_index_of_the_specific_value(){
   LinkedList list = createList();
   int a = 1,b = 2,c = 3,d = 4;
@@ -97,6 +285,10 @@ void test_indexOf_return_the_index_of_the_specific_value_as_1_if_it_is_not_found
   int index = indexOf(list,&no);
   assert(index == -1);
 };
+
+
+///////////////////deleteElementAt///////////
+
 void test_deleteElementAt_delete_element_at_a_specific_position_and_return_it(){
   LinkedList list = createList();
   int no = 3;

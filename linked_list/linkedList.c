@@ -20,7 +20,7 @@ int add_to_list(LinkedList * linked_list,void *value){
     linked_list->last = e;
   }
   linked_list->length++;
-  return 0;
+  return linked_list->length;
 };
 
 void *get_first_element(LinkedList list){
@@ -30,9 +30,7 @@ void *get_last_element(LinkedList list){
   return list.last->value;
 };
 
-void increment(void *value){
-  *(int*)value+=1;
-};
+
 void forEach(LinkedList list, ElementProcessor e){
   Element *elem = list.first;
   for (size_t i = 0; i < list.length; i++) {
